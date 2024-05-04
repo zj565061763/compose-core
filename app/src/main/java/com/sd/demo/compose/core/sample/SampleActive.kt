@@ -1,4 +1,4 @@
-package com.sd.demo.compose.core
+package com.sd.demo.compose.core.sample
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sd.demo.compose.core.logMsg
 import com.sd.demo.compose.core.theme.AppTheme
 import com.sd.lib.compose.core.FActive
 import com.sd.lib.compose.core.FActiveLaunchedEffect

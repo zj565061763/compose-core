@@ -22,9 +22,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SampleActive" />
-        <activity android:name=".SampleLifecycle" />
-        <activity android:name=".SampleViewModelScope" />
+        <activity android:name=".sample.SampleActive" />
+        <activity android:name=".sample.SampleLifecycle" />
+        <activity android:name=".sample.SampleViewModelScope" />
 
     </application>
 

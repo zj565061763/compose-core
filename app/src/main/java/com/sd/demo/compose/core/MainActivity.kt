@@ -19,6 +19,9 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.sd.demo.compose.core.sample.SampleActive
+import com.sd.demo.compose.core.sample.SampleLifecycle
+import com.sd.demo.compose.core.sample.SampleViewModelScope
 import com.sd.demo.compose.core.theme.AppTheme
 
 class MainActivity : ComponentActivity() {

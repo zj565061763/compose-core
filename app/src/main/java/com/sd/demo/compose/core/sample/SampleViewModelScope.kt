@@ -1,4 +1,4 @@
-package com.sd.demo.compose.core
+package com.sd.demo.compose.core.sample
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
+import com.sd.demo.compose.core.logMsg
 import com.sd.demo.compose.core.theme.AppTheme
 import com.sd.lib.compose.core.fRememberVMScope
 import java.util.concurrent.atomic.AtomicInteger
