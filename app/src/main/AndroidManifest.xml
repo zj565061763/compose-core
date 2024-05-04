@@ -26,6 +26,8 @@
         <activity android:name=".sample.SampleLifecycle" />
         <activity android:name=".sample.SampleViewModelScope" />
 
+        <activity android:name=".sample.utils.SampleAnnotatedTarget" />
+
     </application>
 
 </manifest>
