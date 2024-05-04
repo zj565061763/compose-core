@@ -52,7 +52,9 @@ typealias TabDisplay = @Composable (content: @Composable () -> Unit, selected: B
 private val DefaultDisplay: TabDisplay = { content: @Composable () -> Unit, selected: Boolean ->
     Box(
         modifier = Modifier.graphicsLayer {
-            this.scaleX = if (selected) 1f else 0f
+            val scale = if (selected) 1f else 0f
+            this.scaleX = scale
+            this.scaleY = scale
         }
     ) {
         content()
