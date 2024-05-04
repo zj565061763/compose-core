@@ -61,14 +61,14 @@ private fun Content(
             .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        fLoopTarget(list)?.let { target ->
+        fLoopTarget(list).value?.let { targetValue ->
             Box(
                 modifier = modifier.background(
                     color = Color(0xFF114460).copy(0.5f),
                     shape = CircleShape,
                 )
             ) {
-                FCarouselVertical(target = target) { t ->
+                FCarouselVertical(targetValue) { target ->
                     Box(
                         modifier = Modifier
                             .height(26.dp)
@@ -77,7 +77,7 @@ private fun Content(
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
-                            text = t,
+                            text = target,
                             color = Color.White,
                             fontSize = 13.sp,
                             maxLines = 1,
@@ -86,8 +86,8 @@ private fun Content(
                 }
             }
 
-            LaunchedEffect(target) {
-                logMsg { "target:$target" }
+            LaunchedEffect(targetValue) {
+                logMsg { "target:$targetValue" }
             }
         }
     }

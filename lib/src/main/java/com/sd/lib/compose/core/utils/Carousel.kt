@@ -14,11 +14,11 @@ import androidx.compose.ui.draw.clipToBounds
  */
 @Composable
 fun <T> FCarouselVertical(
+    /** 目标 */
+    target: T,
     modifier: Modifier = Modifier,
     /** 切换动画时长 */
     duration: Int = 1000,
-    /** 目标 */
-    target: T,
     /** 内容 */
     content: @Composable (target: T) -> Unit,
 ) {
