@@ -46,9 +46,6 @@ dependencies {
     api(libs.androidx.lifecycle.viewmodel.compose)
     api(libs.androidx.lifecycle.runtime.compose)
     api(libs.androidx.lifecycle.process)
-
-    api(libs.androidx.paging.runtime)
-    api(libs.androidx.paging.compose)
 }
 
 publishing {
