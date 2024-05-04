@@ -21,7 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
  * 如果调用此方法的地方在组合中被移除，[ComposeViewModelScope]会清空所有保存的[ViewModel]
  */
 @Composable
-inline fun <reified VM : ViewModel> fRememberVMScope(): ComposeViewModelScope<VM> {
+inline fun <reified VM : ViewModel> rememberVMScope(): ComposeViewModelScope<VM> {
     val vmClass = VM::class.java
     val scope = remember(vmClass) { ViewModelScopeImpl(vmClass) }
     DisposableEffect(scope) {

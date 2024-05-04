@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import com.sd.demo.compose.core.logMsg
 import com.sd.demo.compose.core.theme.AppTheme
-import com.sd.lib.compose.core.fRememberVMScope
+import com.sd.lib.compose.core.rememberVMScope
 import java.util.concurrent.atomic.AtomicInteger
 
 class SampleViewModelScope : ComponentActivity() {
@@ -38,7 +38,7 @@ class SampleViewModelScope : ComponentActivity() {
 @Composable
 private fun Content() {
 
-    val vmScope = fRememberVMScope<PageViewModel>()
+    val vmScope = rememberVMScope<PageViewModel>()
 
     HorizontalPager(
         state = rememberPagerState { 50 },
