@@ -42,9 +42,7 @@ class SamplePager : ComponentActivity() {
 private fun Content(
     modifier: Modifier = Modifier,
 ) {
-    val state = rememberPagerState {
-        10
-    }
+    val state = rememberPagerState { 10 }
 
     var index by remember { mutableIntStateOf(0) }
 
@@ -53,9 +51,7 @@ private fun Content(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        ButtonsRow(count = 10) {
-            index = it
-        }
+        ButtonsRow(count = 10) { index = it }
 
         PagerView(
             modifier = Modifier.weight(1f),
