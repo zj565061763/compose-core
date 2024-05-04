@@ -61,33 +61,31 @@ private fun Content(
             .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        fLoopTarget(list).value?.let { targetValue ->
-            Box(
-                modifier = modifier.background(
-                    color = Color(0xFF114460).copy(0.5f),
-                    shape = CircleShape,
-                )
-            ) {
-                FCarouselVertical(targetValue) { target ->
-                    Box(
-                        modifier = Modifier
-                            .height(26.dp)
-                            .widthIn(110.dp)
-                            .padding(horizontal = 12.dp),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text = target,
-                            color = Color.White,
-                            fontSize = 13.sp,
-                            maxLines = 1,
-                        )
-                    }
+        Box(
+            modifier = modifier.background(
+                color = Color(0xFF114460).copy(0.5f),
+                shape = CircleShape,
+            ),
+        ) {
+            FCarouselVertical(targets = list) { target ->
+                Box(
+                    modifier = Modifier
+                        .height(26.dp)
+                        .widthIn(110.dp)
+                        .padding(horizontal = 12.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = target,
+                        color = Color.White,
+                        fontSize = 13.sp,
+                        maxLines = 1,
+                    )
                 }
-            }
 
-            LaunchedEffect(targetValue) {
-                logMsg { "target:$targetValue" }
+                LaunchedEffect(target) {
+                    logMsg { "target:$target" }
+                }
             }
         }
     }

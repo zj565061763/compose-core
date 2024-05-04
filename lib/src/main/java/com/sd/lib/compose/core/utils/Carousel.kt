@@ -14,9 +14,32 @@ import androidx.compose.ui.draw.clipToBounds
  */
 @Composable
 fun <T> FCarouselVertical(
+    modifier: Modifier = Modifier,
+    /** 目标 */
+    targets: List<T>,
+    /** 切换动画时长 */
+    duration: Int = 1000,
+    /** 内容 */
+    content: @Composable (target: T) -> Unit,
+) {
+    fLoopTarget(list = targets).value?.let { targetValue ->
+        FCarouselVertical(
+            modifier = modifier,
+            target = targetValue,
+            duration = duration,
+            content = content,
+        )
+    }
+}
+
+/**
+ * 轮播滚动
+ */
+@Composable
+fun <T> FCarouselVertical(
+    modifier: Modifier = Modifier,
     /** 目标 */
     target: T,
-    modifier: Modifier = Modifier,
     /** 切换动画时长 */
     duration: Int = 1000,
     /** 内容 */
