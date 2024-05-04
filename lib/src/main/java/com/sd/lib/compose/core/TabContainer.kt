@@ -12,6 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 
+/**
+ * Tab容器，根据选中的[selectedKey]展示对应的Tab
+ */
 @Composable
 fun TabContainer(
     modifier: Modifier = Modifier,
@@ -31,6 +34,9 @@ fun TabContainer(
     }
 }
 
+/**
+ * 当选中状态变化时，如何显示隐藏Tab，默认的实现[DefaultDisplay]
+ */
 typealias TabDisplay = @Composable (content: @Composable () -> Unit, selected: Boolean) -> Unit
 
 interface TabContainerScope {
