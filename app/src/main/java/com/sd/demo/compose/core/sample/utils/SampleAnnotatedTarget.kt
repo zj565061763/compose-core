@@ -27,12 +27,15 @@ import com.sd.lib.compose.core.utils.fAnnotatedTarget
  * [fAnnotatedTarget]
  */
 class SampleAnnotatedTarget : ComponentActivity() {
+
+    private val _text = "123456789 123456789 123456789 123456789"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme {
                 Content(
-                    text = "123456789 123456789 123456789 123456789"
+                    text = _text
                 )
             }
         }
