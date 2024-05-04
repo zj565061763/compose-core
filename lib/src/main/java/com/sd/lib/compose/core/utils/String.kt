@@ -19,7 +19,7 @@ import androidx.compose.ui.platform.LocalContext
  * * 其他 -> 调用对象的toString()
  */
 @Composable
-fun fString(vararg items: Any): String {
+fun fString(vararg items: Any?): String {
     val resources = resources()
     return when (items.size) {
         0 -> ""
