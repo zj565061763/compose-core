@@ -25,6 +25,7 @@ import com.sd.demo.compose.core.sample.SampleViewModelScope
 import com.sd.demo.compose.core.sample.utils.SampleAnnotatedTarget
 import com.sd.demo.compose.core.sample.utils.SampleCarousel
 import com.sd.demo.compose.core.sample.utils.SampleClick
+import com.sd.demo.compose.core.sample.utils.SamplePager
 import com.sd.demo.compose.core.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -41,6 +42,7 @@ class MainActivity : ComponentActivity() {
                         SampleAnnotatedTarget::class.java,
                         SampleCarousel::class.java,
                         SampleClick::class.java,
+                        SamplePager::class.java,
                     ),
                     onClickActivity = {
                         startActivity(Intent(this, it))
