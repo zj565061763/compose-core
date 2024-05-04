@@ -22,12 +22,8 @@ import androidx.compose.ui.unit.sp
 import com.sd.demo.compose.core.logMsg
 import com.sd.demo.compose.core.theme.AppTheme
 import com.sd.lib.compose.core.utils.FCarouselVertical
-import com.sd.lib.compose.core.utils.fLoopTarget
 import java.util.UUID
 
-/**
- * [FCarouselVertical]，[fLoopTarget]
- */
 class SampleCarousel : ComponentActivity() {
 
     private val _list = MutableList(10) { index ->

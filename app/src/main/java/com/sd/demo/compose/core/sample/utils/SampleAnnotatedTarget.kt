@@ -23,9 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.sd.demo.compose.core.theme.AppTheme
 import com.sd.lib.compose.core.utils.fAnnotatedTarget
 
-/**
- * [fAnnotatedTarget]
- */
 class SampleAnnotatedTarget : ComponentActivity() {
 
     private val _text = "123456789 123456789 123456789 123456789"
