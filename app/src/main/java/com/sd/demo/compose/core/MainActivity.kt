@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sd.demo.compose.core.sample.SampleActive
 import com.sd.demo.compose.core.sample.SampleLifecycle
+import com.sd.demo.compose.core.sample.SampleTabContainer
 import com.sd.demo.compose.core.sample.SampleViewModelScope
 import com.sd.demo.compose.core.sample.utils.SampleAnnotatedTarget
 import com.sd.demo.compose.core.sample.utils.SampleCarousel
@@ -38,6 +39,7 @@ class MainActivity : ComponentActivity() {
                     listActivity = listOf(
                         SampleActive::class.java,
                         SampleLifecycle::class.java,
+                        SampleTabContainer::class.java,
                         SampleViewModelScope::class.java,
 
                         SampleAnnotatedTarget::class.java,
