@@ -27,6 +27,7 @@ fun TabContainer(
     }.apply {
         startConfig()
         apply()
+        stopConfig()
     }
 
     Box(modifier = modifier) {
@@ -63,16 +64,20 @@ private class TabContainerImpl(
     private val _store: MutableMap<Any, TabInfo> = mutableMapOf()
     private val _activeTabs: MutableMap<Any, TabState> = mutableStateMapOf()
 
-    private var _config = false
+    private var _configState: ConfigState = ConfigState.None
 
     private val _keys: MutableSet<Any> = mutableSetOf()
 
     fun startConfig() {
-        _config = true
+        _configState = ConfigState.Configing
         if (checkKey) {
             _keys.clear()
             _keys.addAll(_store.keys)
         }
+    }
+
+    fun stopConfig() {
+        _configState = ConfigState.Configed
     }
 
     override fun tab(
@@ -80,7 +85,7 @@ private class TabContainerImpl(
         display: TabDisplay?,
         content: @Composable () -> Unit,
     ) {
-        check(_config) { "Config not started." }
+        check(_configState == ConfigState.Configing) { "Config not started." }
 
         if (checkKey) {
             _keys.remove(key)
@@ -96,8 +101,8 @@ private class TabContainerImpl(
     }
 
     private fun checkConfig() {
-        if (_config) {
-            _config = false
+        if (_configState == ConfigState.Configed) {
+            _configState = ConfigState.None
 
             if (checkKey) {
                 _keys.forEach { key ->
@@ -138,6 +143,12 @@ private class TabContainerImpl(
                 display(state.content.value, key == selectedKey)
             }
         }
+    }
+
+    enum class ConfigState {
+        None,
+        Configing,
+        Configed,
     }
 }
 
