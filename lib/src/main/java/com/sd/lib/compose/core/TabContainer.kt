@@ -72,7 +72,7 @@ private class TabContainerImpl(
     private val _keys: MutableSet<Any> = mutableSetOf()
 
     fun startConfig() {
-        if (_configState.compareAndSet(ConfigState.None, ConfigState.Configing)) {
+        if (_configState.compareAndSet(ConfigState.None, ConfigState.Config)) {
             if (checkKey) {
                 _keys.clear()
                 _keys.addAll(_store.keys)
@@ -81,7 +81,7 @@ private class TabContainerImpl(
     }
 
     fun stopConfig() {
-        _configState.compareAndSet(ConfigState.Configing, ConfigState.Configed)
+        _configState.compareAndSet(ConfigState.Config, ConfigState.ConfigFinish)
     }
 
     override fun tab(
@@ -89,7 +89,7 @@ private class TabContainerImpl(
         display: TabDisplay?,
         content: @Composable () -> Unit,
     ) {
-        if (_configState.get() == ConfigState.Configing) {
+        if (_configState.get() == ConfigState.Config) {
             if (checkKey) {
                 _keys.remove(key)
             }
@@ -105,7 +105,7 @@ private class TabContainerImpl(
     }
 
     private fun checkConfig() {
-        if (_configState.compareAndSet(ConfigState.Configed, ConfigState.None)) {
+        if (_configState.compareAndSet(ConfigState.ConfigFinish, ConfigState.None)) {
             if (checkKey) {
                 _keys.forEach { key ->
                     _store.remove(key)
@@ -149,8 +149,8 @@ private class TabContainerImpl(
 
     enum class ConfigState {
         None,
-        Configing,
-        Configed,
+        Config,
+        ConfigFinish,
     }
 }
 
