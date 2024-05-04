@@ -128,7 +128,7 @@ private class TabContainerImpl(
         }
 
         LaunchedEffect(selectedKey) {
-            if (!_activeTabs.containsKey(selectedKey)) {
+            if (_activeTabs[selectedKey] == null) {
                 val info = checkNotNull(_store[selectedKey]) { "Key $selectedKey was not found." }
                 _activeTabs[selectedKey] = TabState(
                     display = mutableStateOf(info.display),
