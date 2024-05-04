@@ -30,7 +30,7 @@ class SampleAnnotatedTarget : ComponentActivity() {
         setContent {
             AppTheme {
                 Content(
-                    text = "123456789123456789123456789123456789"
+                    text = "123456789 123456789 123456789 123456789"
                 )
             }
         }
