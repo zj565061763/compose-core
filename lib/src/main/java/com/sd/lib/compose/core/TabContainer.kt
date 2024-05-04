@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Tab容器，根据选中的[selectedKey]展示对应的Tab
@@ -64,20 +65,21 @@ private class TabContainerImpl(
     private val _store: MutableMap<Any, TabInfo> = mutableMapOf()
     private val _activeTabs: MutableMap<Any, TabState> = mutableStateMapOf()
 
-    private var _configState: ConfigState = ConfigState.None
+    private var _configState = AtomicReference(ConfigState.None)
 
     private val _keys: MutableSet<Any> = mutableSetOf()
 
     fun startConfig() {
-        _configState = ConfigState.Configing
-        if (checkKey) {
-            _keys.clear()
-            _keys.addAll(_store.keys)
+        if (_configState.compareAndSet(ConfigState.None, ConfigState.Configing)) {
+            if (checkKey) {
+                _keys.clear()
+                _keys.addAll(_store.keys)
+            }
         }
     }
 
     fun stopConfig() {
-        _configState = ConfigState.Configed
+        _configState.compareAndSet(ConfigState.Configing, ConfigState.Configed)
     }
 
     override fun tab(
@@ -85,25 +87,23 @@ private class TabContainerImpl(
         display: TabDisplay?,
         content: @Composable () -> Unit,
     ) {
-        check(_configState == ConfigState.Configing) { "Config not started." }
+        if (_configState.get() == ConfigState.Configing) {
+            if (checkKey) {
+                _keys.remove(key)
+            }
 
-        if (checkKey) {
-            _keys.remove(key)
-        }
-
-        val info = _store[key]
-        if (info == null) {
-            _store[key] = TabInfo(display = display, content = content)
-        } else {
-            info.display = display
-            info.content = content
+            val info = _store[key]
+            if (info == null) {
+                _store[key] = TabInfo(display = display, content = content)
+            } else {
+                info.display = display
+                info.content = content
+            }
         }
     }
 
     private fun checkConfig() {
-        if (_configState == ConfigState.Configed) {
-            _configState = ConfigState.None
-
+        if (_configState.compareAndSet(ConfigState.Configed, ConfigState.None)) {
             if (checkKey) {
                 _keys.forEach { key ->
                     _store.remove(key)
