@@ -34,17 +34,27 @@ fun TabContainer(
     }
 }
 
-/**
- * 当选中状态变化时，如何显示隐藏Tab，默认的实现[DefaultDisplay]
- */
-typealias TabDisplay = @Composable (content: @Composable () -> Unit, selected: Boolean) -> Unit
-
 interface TabContainerScope {
     fun tab(
         key: Any,
         display: TabDisplay? = null,
         content: @Composable () -> Unit,
     )
+}
+
+/**
+ * 当选中状态变化时，如何显示隐藏Tab，默认的实现[DefaultDisplay]
+ */
+typealias TabDisplay = @Composable (content: @Composable () -> Unit, selected: Boolean) -> Unit
+
+private val DefaultDisplay: TabDisplay = { content: @Composable () -> Unit, selected: Boolean ->
+    Box(
+        modifier = Modifier.graphicsLayer {
+            this.scaleX = if (selected) 1f else 0f
+        }
+    ) {
+        content()
+    }
 }
 
 private class TabContainerImpl(
@@ -128,16 +138,6 @@ private class TabContainerImpl(
                 display(state.content.value, key == selectedKey)
             }
         }
-    }
-}
-
-private val DefaultDisplay: TabDisplay = { content: @Composable () -> Unit, selected: Boolean ->
-    Box(
-        modifier = Modifier.graphicsLayer {
-            this.scaleX = if (selected) 1f else 0f
-        }
-    ) {
-        content()
     }
 }
 
