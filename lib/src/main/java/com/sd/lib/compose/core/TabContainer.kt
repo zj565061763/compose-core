@@ -20,11 +20,10 @@ import java.util.concurrent.atomic.AtomicReference
 fun TabContainer(
     modifier: Modifier = Modifier,
     selectedKey: Any,
-    checkKey: Boolean = false,
     apply: TabContainerScope.() -> Unit,
 ) {
-    val container = remember(checkKey) {
-        TabContainerImpl(checkKey)
+    val container = remember {
+        TabContainerImpl()
     }.apply {
         startConfig()
         apply()
@@ -61,23 +60,14 @@ private val DefaultDisplay: TabDisplay = { content: @Composable () -> Unit, sele
     }
 }
 
-private class TabContainerImpl(
-    private val checkKey: Boolean,
-) : TabContainerScope {
+private class TabContainerImpl : TabContainerScope {
     private val _store: MutableMap<Any, TabInfo> = mutableMapOf()
     private val _activeTabs: MutableMap<Any, TabState> = mutableStateMapOf()
 
     private var _configState = AtomicReference(ConfigState.None)
 
-    private val _keys: MutableSet<Any> = mutableSetOf()
-
     fun startConfig() {
-        if (_configState.compareAndSet(ConfigState.None, ConfigState.Config)) {
-            if (checkKey) {
-                _keys.clear()
-                _keys.addAll(_store.keys)
-            }
-        }
+        _configState.compareAndSet(ConfigState.None, ConfigState.Config)
     }
 
     fun stopConfig() {
@@ -90,10 +80,6 @@ private class TabContainerImpl(
         content: @Composable () -> Unit,
     ) {
         if (_configState.get() == ConfigState.Config) {
-            if (checkKey) {
-                _keys.remove(key)
-            }
-
             val info = _store[key]
             if (info == null) {
                 _store[key] = TabInfo(display = display, content = content)
@@ -106,13 +92,6 @@ private class TabContainerImpl(
 
     private fun checkConfig() {
         if (_configState.compareAndSet(ConfigState.ConfigFinish, ConfigState.None)) {
-            if (checkKey) {
-                _keys.forEach { key ->
-                    _store.remove(key)
-                    _activeTabs.remove(key)
-                }
-            }
-
             _activeTabs.forEach { active ->
                 val info = checkNotNull(_store[active.key])
                 active.value.apply {
