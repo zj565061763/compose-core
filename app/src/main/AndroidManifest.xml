@@ -32,6 +32,7 @@
         <activity android:name=".sample.utils.SampleClick" />
         <activity android:name=".sample.utils.SamplePager" />
         <activity android:name=".sample.utils.SampleString" />
+        <activity android:name=".sample.utils.SampleConstrainLayout" />
 
     </application>
 
