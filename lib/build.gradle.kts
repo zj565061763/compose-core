@@ -6,7 +6,7 @@ plugins {
 
 val libGroupId = "com.sd.lib.android"
 val libArtifactId = "compose-core"
-val libVersion = "1.0.1"
+val libVersion = "1.0.2"
 
 android {
     namespace = "com.sd.lib.compose.core"
