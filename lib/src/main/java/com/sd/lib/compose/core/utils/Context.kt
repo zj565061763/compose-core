@@ -7,6 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 
+/**
+ * 优先从[LocalContext]中查找[Activity]返回，如果找不到的话使用当前[LocalContext]
+ */
 @Composable
 fun fPreferActivityContext(): Context {
     val context = LocalContext.current
