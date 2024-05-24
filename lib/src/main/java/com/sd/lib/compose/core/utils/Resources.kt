@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalContext
  */
 @Composable
 fun fString(vararg items: Any?): String {
-    val resources = resources()
+    val resources = fResources()
     return when (items.size) {
         0 -> ""
         1 -> items.first().anyToString(resources)
@@ -32,6 +32,16 @@ fun fString(vararg items: Any?): String {
             result
         }
     }
+}
+
+/**
+ * 获取资源[Resources]
+ */
+@Composable
+@ReadOnlyComposable
+fun fResources(): Resources {
+    LocalConfiguration.current
+    return LocalContext.current.resources
 }
 
 private fun Array<*>.itemsToString(resources: Resources): String {
@@ -49,11 +59,4 @@ private fun Any?.anyToString(resources: Resources): String {
         is Int -> resources.getString(this)
         else -> this.toString()
     }
-}
-
-@Composable
-@ReadOnlyComposable
-private fun resources(): Resources {
-    LocalConfiguration.current
-    return LocalContext.current.resources
 }
