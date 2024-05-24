@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.sd.demo.compose.core.theme.AppTheme
@@ -31,8 +30,8 @@ private fun Content(
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
     ) {
-        fHorizontalLine(bias = 0.5f, color = Color.Red)
-        fVerticalLine(bias = 0.5f, color = Color.Blue)
+        fHorizontalLine(bias = 0.5f)
+        fVerticalLine(bias = 0.5f)
     }
 }
 

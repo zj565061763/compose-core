@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayoutScope
@@ -17,9 +18,10 @@ import androidx.constraintlayout.compose.Dimension
 fun ConstraintLayoutScope.fHorizontalLine(
     bias: Float,
     target: ConstrainedLayoutReference? = null,
-    color: Color? = null,
+    color: Color = Color.Red,
 ): ConstrainedLayoutReference {
     return createRef().also { line ->
+        val inspectionMode = LocalInspectionMode.current
         Box(
             modifier = Modifier
                 .constrainAs(line) {
@@ -29,7 +31,7 @@ fun ConstraintLayoutScope.fHorizontalLine(
                         bottom = finalTarget.bottom,
                         bias = bias,
                     )
-                    if (color != null) {
+                    if (inspectionMode) {
                         height = Dimension.value(1.dp)
                         linkTo(
                             start = finalTarget.start,
@@ -39,10 +41,10 @@ fun ConstraintLayoutScope.fHorizontalLine(
                     }
                 }
                 .let {
-                    if (color == null) {
-                        it
-                    } else {
+                    if (inspectionMode) {
                         it.background(color)
+                    } else {
+                        it
                     }
                 }
         )
@@ -56,9 +58,10 @@ fun ConstraintLayoutScope.fHorizontalLine(
 fun ConstraintLayoutScope.fVerticalLine(
     bias: Float,
     target: ConstrainedLayoutReference? = null,
-    color: Color? = null,
+    color: Color = Color.Red,
 ): ConstrainedLayoutReference {
     return createRef().also { line ->
+        val inspectionMode = LocalInspectionMode.current
         Box(
             modifier = Modifier
                 .constrainAs(line) {
@@ -68,7 +71,7 @@ fun ConstraintLayoutScope.fVerticalLine(
                         end = finalTarget.end,
                         bias = bias,
                     )
-                    if (color != null) {
+                    if (inspectionMode) {
                         width = Dimension.value(1.dp)
                         linkTo(
                             top = finalTarget.top,
@@ -78,10 +81,10 @@ fun ConstraintLayoutScope.fVerticalLine(
                     }
                 }
                 .let {
-                    if (color == null) {
-                        it
-                    } else {
+                    if (inspectionMode) {
                         it.background(color)
+                    } else {
+                        it
                     }
                 }
         )
