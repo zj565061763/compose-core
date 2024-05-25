@@ -14,6 +14,8 @@ open class FDecayIndexLooper(
     private val linearInterval: Long = 100,
     /** 当减速间隔大于[maxDecayInterval]时停止循环 */
     private val maxDecayInterval: Long = linearInterval * 10,
+    /** 计算减速增加的间隔 */
+    private val decayIncreasedInterval: (interval: Long) -> Long = { (it * 0.25f).toLong() },
 ) {
     init {
         require(initialIndex >= 0)
@@ -105,14 +107,13 @@ open class FDecayIndexLooper(
      */
     private fun calculateIntervalList(): MutableList<Long> {
         val list = mutableListOf<Long>()
-        var currentInterval = linearInterval
+        var interval = linearInterval
         while (true) {
-            val delta = (currentInterval * 0.2f).toLong()
-            currentInterval += delta
-            if (currentInterval <= maxDecayInterval) {
-                list.add(currentInterval)
-            } else {
+            interval += decayIncreasedInterval(interval).also { check(it > 0) }
+            if (interval > maxDecayInterval) {
                 break
+            } else {
+                list.add(interval)
             }
         }
         return list
