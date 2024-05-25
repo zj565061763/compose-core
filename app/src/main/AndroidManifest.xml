@@ -33,6 +33,7 @@
         <activity android:name=".sample.utils.SamplePager" />
         <activity android:name=".sample.utils.SampleString" />
         <activity android:name=".sample.utils.SampleConstrainLayout" />
+        <activity android:name=".sample.utils.SampleDecayIndexLooper" />
 
     </application>
 

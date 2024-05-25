@@ -27,6 +27,7 @@ import com.sd.demo.compose.core.sample.utils.SampleAnnotatedTarget
 import com.sd.demo.compose.core.sample.utils.SampleCarousel
 import com.sd.demo.compose.core.sample.utils.SampleClick
 import com.sd.demo.compose.core.sample.utils.SampleConstrainLayout
+import com.sd.demo.compose.core.sample.utils.SampleDecayIndexLooper
 import com.sd.demo.compose.core.sample.utils.SamplePager
 import com.sd.demo.compose.core.sample.utils.SampleString
 import com.sd.demo.compose.core.theme.AppTheme
@@ -49,6 +50,7 @@ class MainActivity : ComponentActivity() {
                         SamplePager::class.java,
                         SampleString::class.java,
                         SampleConstrainLayout::class.java,
+                        SampleDecayIndexLooper::class.java,
                     ),
                     onClickActivity = {
                         startActivity(Intent(this, it))
