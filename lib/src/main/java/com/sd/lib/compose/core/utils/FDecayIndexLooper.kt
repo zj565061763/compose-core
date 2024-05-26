@@ -77,7 +77,12 @@ class FDecayIndexLooper(
             } finally {
                 reset()
             }
-        }.isActive
+        }.isActive.also { isActive ->
+            if (!isActive) {
+                // 如果启动失败，重置
+                reset()
+            }
+        }
     }
 
     /**
