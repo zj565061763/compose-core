@@ -24,6 +24,10 @@ open class FDecayIndexLooper(
     var currentIndex by mutableStateOf<Int?>(null)
         private set
 
+    /** 是否正在循环中 */
+    var looping by mutableStateOf(false)
+        private set
+
     /** 是否已经开始 */
     private val _started = AtomicBoolean(false)
 
@@ -48,11 +52,13 @@ open class FDecayIndexLooper(
             _stopIndex.set(null)
             try {
                 currentIndex = initialIndex.coerceIn(0, size - 1)
+                looping = true
                 delay(linearInterval)
 
                 performLinear()
                 performDecay()
             } finally {
+                looping = false
                 _started.set(false)
             }
         }
