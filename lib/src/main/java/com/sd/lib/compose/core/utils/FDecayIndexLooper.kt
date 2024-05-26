@@ -49,6 +49,7 @@ class FDecayIndexLooper(
      * @param size 循环大小
      * @param initialIndex 开始的位置
      * @param onStart 开始回调
+     * @param onFinish 结束回调
      * @return 本次调用是否有效
      */
     fun startLoop(
@@ -59,7 +60,7 @@ class FDecayIndexLooper(
         /** 开始回调 */
         onStart: () -> Unit = {},
         /** 结束回调 */
-        onStop: () -> Unit = {},
+        onFinish: () -> Unit = {},
     ): Boolean {
         if (size <= 0) return false
         if (!_started.compareAndSet(false, true)) return false
@@ -78,7 +79,7 @@ class FDecayIndexLooper(
                 performDecay()
             } finally {
                 reset()
-                onStop()
+                onFinish()
             }
         }.isActive.also { isActive ->
             if (!isActive) {
