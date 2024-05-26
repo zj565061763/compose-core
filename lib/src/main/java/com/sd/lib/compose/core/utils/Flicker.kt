@@ -15,7 +15,7 @@ fun Modifier.fFlicker(
     /** 开始透明度 */
     startAlpha: Float = 1f,
     /** 结束透明度 */
-    endAlpha: Float = 0.3f,
+    endAlpha: Float = 0f,
     /** 闪烁重复次数 */
     repeatCount: Int = 2,
     /** 是否可用 */
