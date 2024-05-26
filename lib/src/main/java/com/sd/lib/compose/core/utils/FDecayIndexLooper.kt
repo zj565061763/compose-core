@@ -44,9 +44,12 @@ open class FDecayIndexLooper(
         if (_started.compareAndSet(false, true)) {
             _stopIndex.set(-1)
             _size = size
-            performLinear()
-            performDecay()
-            _started.set(false)
+            try {
+                performLinear()
+                performDecay()
+            } finally {
+                _started.set(false)
+            }
         }
     }
 
