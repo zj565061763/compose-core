@@ -43,13 +43,12 @@ class FDecayIndexLooper(
     /** 要停止的位置，null-未开始减速 */
     private val _stopIndex = AtomicReference<Int?>(null)
 
+    /** 开始减速回调 */
+    private var _onStartDecay: (() -> Unit)? = null
+
     /**
      * 开始从[0至(size-1)]之间无限循环，并通知[currentIndex]
      *
-     * @param size 循环大小
-     * @param initialIndex 开始的位置
-     * @param onStart 开始回调
-     * @param onFinish 结束回调
      * @return 本次调用是否有效
      */
     fun startLoop(
@@ -59,6 +58,8 @@ class FDecayIndexLooper(
         initialIndex: Int = 0,
         /** 开始回调 */
         onStart: () -> Unit = {},
+        /** 开始减速回调 */
+        onStartDecay: () -> Unit = {},
         /** 结束回调 */
         onFinish: () -> Unit = {},
     ): Boolean {
@@ -67,6 +68,7 @@ class FDecayIndexLooper(
 
         _size = size
         _stopIndex.set(null)
+        _onStartDecay = onStartDecay
 
         return coroutineScope.launch {
             try {
@@ -99,6 +101,7 @@ class FDecayIndexLooper(
             val legalIndex = stopIndex.coerceIn(0, _size - 1)
             if (_stopIndex.compareAndSet(null, legalIndex)) {
                 decaying = true
+                _onStartDecay?.invoke()
                 return true
             }
         }
@@ -106,6 +109,7 @@ class FDecayIndexLooper(
     }
 
     private fun reset() {
+        _onStartDecay = null
         decaying = false
         looping = false
         _started.set(false)

@@ -61,6 +61,7 @@ private fun Content(
                     size = SIZE,
                     initialIndex = 0,
                     onStart = { logMsg { "onStart" } },
+                    onStartDecay = { logMsg { "onStartDecay" } },
                     onFinish = { logMsg { "onFinish" } },
                 )
                 logMsg { "click startLoop:${startLoop}" }
