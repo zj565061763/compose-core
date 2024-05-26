@@ -23,7 +23,7 @@ import com.sd.demo.compose.core.theme.AppTheme
 import com.sd.lib.compose.core.utils.FDecayIndexLooper
 import kotlinx.coroutines.launch
 
-private const val COUNT = 5
+private const val SIZE = 5
 
 class SampleDecayIndexLooper : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +55,7 @@ private fun Content(
 
         Row {
             Button(onClick = {
-                coroutineScope.launch { looper.startLoop(5) }
+                coroutineScope.launch { looper.startLoop(SIZE) }
             }) {
                 Text(text = "开始循环")
             }
@@ -74,13 +74,13 @@ private fun Content(
 @Composable
 private fun ListView(
     modifier: Modifier = Modifier,
-    selectedIndex: Int,
+    selectedIndex: Int?,
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        items(COUNT) { index ->
+        items(SIZE) { index ->
             Button(
                 onClick = { },
                 enabled = index == selectedIndex,

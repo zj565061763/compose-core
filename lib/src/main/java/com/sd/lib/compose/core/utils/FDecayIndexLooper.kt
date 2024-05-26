@@ -1,15 +1,13 @@
 package com.sd.lib.compose.core.utils
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import kotlinx.coroutines.delay
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
 
 open class FDecayIndexLooper(
-    /** 初始位置 */
-    initialIndex: Int = 0,
     /** 匀速间隔 */
     private val linearInterval: Long = 100,
     /** 当减速间隔大于[maxDecayInterval]时停止循环 */
@@ -18,33 +16,39 @@ open class FDecayIndexLooper(
     private val decayIncreasedInterval: (interval: Long) -> Long = { (it * 0.25f).toLong() },
 ) {
     init {
-        require(initialIndex >= 0)
         require(linearInterval > 0)
         require(maxDecayInterval > linearInterval)
     }
 
-    /** 当前位置 */
-    var currentIndex by mutableIntStateOf(initialIndex)
+    /** 当前位置，null-未开始过 */
+    var currentIndex by mutableStateOf<Int?>(null)
         private set
 
     /** 是否已经开始 */
     private val _started = AtomicBoolean(false)
 
-    /** 要停止的位置 */
-    private val _stopIndex = AtomicInteger(-1)
-
     /** 循环大小 */
     private var _size = 0
 
+    /** 要停止的位置，null-未开始减速 */
+    private val _stopIndex = AtomicReference<Int?>(null)
+
     /**
-     * 开始循环[size]并挂起
+     * 开始从[0-(size-1)]循环并挂起
      */
-    suspend fun startLoop(size: Int) {
+    suspend fun startLoop(
+        /** 循环大小 */
+        size: Int,
+        /** 初始位置 */
+        initialIndex: Int = 0,
+    ) {
         if (size <= 0) return
         if (_started.compareAndSet(false, true)) {
-            _stopIndex.set(-1)
             _size = size
+            _stopIndex.set(null)
+            currentIndex = initialIndex.coerceIn(0, size - 1)
             try {
+                delay(linearInterval)
                 performLinear()
                 performDecay()
             } finally {
@@ -59,7 +63,7 @@ open class FDecayIndexLooper(
     fun startDecay(stopIndex: Int) {
         if (_started.get()) {
             val legalIndex = stopIndex.coerceIn(0, _size - 1)
-            _stopIndex.compareAndSet(-1, legalIndex)
+            _stopIndex.compareAndSet(null, legalIndex)
         }
     }
 
@@ -68,7 +72,7 @@ open class FDecayIndexLooper(
      */
     private suspend fun performLinear() {
         loop(
-            loop = { _started.get() && _stopIndex.get() < 0 },
+            loop = { _started.get() && _stopIndex.get() == null },
             delay = { delay(linearInterval) }
         )
     }
@@ -77,8 +81,7 @@ open class FDecayIndexLooper(
      * 减速
      */
     private suspend fun performDecay() {
-        val stopIndex = _stopIndex.get()
-        check(stopIndex >= 0)
+        val stopIndex = _stopIndex.get() ?: return
 
         val list = calculateIntervalList()
         if (list.isEmpty()) {
@@ -87,7 +90,9 @@ open class FDecayIndexLooper(
         }
 
         var step = calculateStartDecayStep(
+            size = _size,
             decayCount = list.size,
+            currentIndex = checkNotNull(currentIndex),
             stopIndex = stopIndex,
         ).also { check(it >= 0) }
 
@@ -99,16 +104,21 @@ open class FDecayIndexLooper(
             }
         )
 
+        var index = 0
         loop(
-            loop = { list.isNotEmpty() },
-            delay = { delay(list.removeAt(0)) },
+            loop = { index < list.size },
+            delay = {
+                val interval = list[index]
+                index++
+                delay(interval)
+            },
         )
     }
 
     /**
      * 计算减速间隔
      */
-    private fun calculateIntervalList(): MutableList<Long> {
+    private fun calculateIntervalList(): List<Long> {
         val list = mutableListOf<Long>()
         var interval = linearInterval
         while (true) {
@@ -126,10 +136,11 @@ open class FDecayIndexLooper(
      * 计算可以开始减速的步数
      */
     private fun calculateStartDecayStep(
+        size: Int,
         decayCount: Int,
+        currentIndex: Int,
         stopIndex: Int,
     ): Int {
-        val size = _size
         val appendIndex = currentIndex + (decayCount % size)
         val futureIndex = appendIndex.takeIf { it < size } ?: (appendIndex % size)
         return if (futureIndex <= stopIndex) {
@@ -144,7 +155,7 @@ open class FDecayIndexLooper(
         delay: suspend () -> Unit,
     ) {
         while (loop()) {
-            val nextIndex = (currentIndex + 1).takeIf { it < _size } ?: 0
+            val nextIndex = (checkNotNull(currentIndex) + 1).takeIf { it < _size } ?: 0
             notifyCurrentIndex(nextIndex)
             delay()
         }
