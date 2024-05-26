@@ -41,9 +41,7 @@ private fun Content(
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val looper = remember(coroutineScope) {
-        FDecayIndexLooper(coroutineScope)
-    }
+    val looper = remember(coroutineScope) { FDecayIndexLooper(coroutineScope) }
 
     Column(
         modifier = modifier.fillMaxSize(),
