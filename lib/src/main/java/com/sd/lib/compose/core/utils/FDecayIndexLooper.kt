@@ -15,7 +15,7 @@ class FDecayIndexLooper(
     /** 匀速间隔 */
     private val linearInterval: Long = 100,
     /** 当减速间隔大于[maxDecayInterval]时停止循环 */
-    private val maxDecayInterval: Long = linearInterval * 12,
+    private val maxDecayInterval: Long = linearInterval * 10,
     /** 计算减速增加的间隔 */
     private val decayIncreasedInterval: (interval: Long) -> Long = { (it * 0.3f).toLong() },
 ) {
@@ -75,7 +75,6 @@ class FDecayIndexLooper(
                 currentIndex = initialIndex.coerceIn(0, _size - 1)
                 looping = true
                 onStart()
-                delay(linearInterval)
 
                 performLinear()
                 performDecay()
@@ -206,9 +205,9 @@ class FDecayIndexLooper(
         delay: suspend () -> Unit,
     ) {
         while (loop()) {
+            delay()
             val nextIndex = (checkNotNull(currentIndex) + 1).takeIf { it < _size } ?: 0
             currentIndex = nextIndex
-            delay()
         }
     }
 }
