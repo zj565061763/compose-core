@@ -10,6 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 
+/**
+ * 闪烁
+ */
 fun Modifier.fFlicker(
     /** 是否闪烁 */
     flicker: Boolean,
@@ -33,9 +36,13 @@ fun Modifier.fFlicker(
     onFlickerFinish: () -> Unit,
 ): Modifier = if (enabled) {
     composed {
+        require(repeatCount > 0)
+
         val startAlphaUpdated by rememberUpdatedState(startAlpha)
         val endAlphaUpdated by rememberUpdatedState(endAlpha)
         val repeatCountUpdated by rememberUpdatedState(repeatCount)
+        val animateToStartAlphaUpdated by rememberUpdatedState(animateToStartAlpha)
+        val animateToEndAlphaUpdated by rememberUpdatedState(animateToEndAlpha)
 
         val animatable = remember { Animatable(1f) }
         val onFlickerFinishUpdated by rememberUpdatedState(onFlickerFinish)
@@ -45,18 +52,19 @@ fun Modifier.fFlicker(
                 animatable.snapTo(startAlphaUpdated)
                 if (repeatCountUpdated == Int.MAX_VALUE) {
                     while (true) {
-                        animateToEndAlpha(animatable, endAlphaUpdated)
-                        animateToStartAlpha(animatable, startAlphaUpdated)
+                        animateToEndAlphaUpdated(animatable, endAlphaUpdated)
+                        animateToStartAlphaUpdated(animatable, startAlphaUpdated)
                     }
                 } else {
                     repeat(repeatCountUpdated) {
-                        animateToEndAlpha(animatable, endAlphaUpdated)
-                        animateToStartAlpha(animatable, startAlphaUpdated)
+                        animateToEndAlphaUpdated(animatable, endAlphaUpdated)
+                        animateToStartAlphaUpdated(animatable, startAlphaUpdated)
                     }
                     onFlickerFinishUpdated()
                 }
             }
         }
+
         graphicsLayer {
             this.alpha = animatable.value
         }
