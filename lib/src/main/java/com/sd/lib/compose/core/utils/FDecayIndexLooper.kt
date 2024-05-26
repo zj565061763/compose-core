@@ -74,14 +74,18 @@ open class FDecayIndexLooper(
 
     /**
      * 开始减速，并停留在[stopIndex]位置
+     *
+     * @return 本次调用是否有效
      */
-    fun startDecay(stopIndex: Int) {
+    fun startDecay(stopIndex: Int): Boolean {
         if (_started.get()) {
             val legalIndex = stopIndex.coerceIn(0, _size - 1)
             if (_stopIndex.compareAndSet(null, legalIndex)) {
                 decaying = true
+                return true
             }
         }
+        return false
     }
 
     /**
