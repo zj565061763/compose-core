@@ -3,11 +3,15 @@ package com.sd.lib.compose.core.utils
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-open class FDecayIndexLooper(
+class FDecayIndexLooper(
+    private val coroutineScope: CoroutineScope = MainScope(),
     /** 匀速间隔 */
     private val linearInterval: Long = 100,
     /** 当减速间隔大于[maxDecayInterval]时停止循环 */
@@ -34,30 +38,36 @@ open class FDecayIndexLooper(
 
     /** 是否已经开始 */
     private val _started = AtomicBoolean(false)
-
     /** 循环大小 */
     private var _size = 0
-
     /** 要停止的位置，null-未开始减速 */
     private val _stopIndex = AtomicReference<Int?>(null)
 
     /**
-     * 开始从[0-(size-1)]循环并挂起
+     * 开始从[0至(size-1)]之间无限循环，并通知[currentIndex]
+     *
+     * @param size 循环大小
+     * @param initialIndex 开始的位置
+     * @param onStart 开始回调
+     * @return 本次调用是否有效
      */
-    suspend fun startLoop(
+    fun startLoop(
         /** 循环大小 */
         size: Int,
         /** 初始位置 */
         initialIndex: Int = 0,
         /** 开始回调 */
         onStart: () -> Unit = {},
-    ) {
-        if (size <= 0) return
-        if (_started.compareAndSet(false, true)) {
-            _size = size
-            _stopIndex.set(null)
+    ): Boolean {
+        if (size <= 0) return false
+        if (!_started.compareAndSet(false, true)) return false
+
+        _size = size
+        _stopIndex.set(null)
+
+        return coroutineScope.launch {
             try {
-                currentIndex = initialIndex.coerceIn(0, size - 1)
+                currentIndex = initialIndex.coerceIn(0, _size - 1)
                 looping = true
                 onStart()
                 delay(linearInterval)
@@ -65,11 +75,9 @@ open class FDecayIndexLooper(
                 performLinear()
                 performDecay()
             } finally {
-                decaying = false
-                looping = false
-                _started.set(false)
+                reset()
             }
-        }
+        }.isActive
     }
 
     /**
@@ -88,12 +96,18 @@ open class FDecayIndexLooper(
         return false
     }
 
+    private fun reset() {
+        decaying = false
+        looping = false
+        _started.set(false)
+    }
+
     /**
      * 匀速
      */
     private suspend fun performLinear() {
         loop(
-            loop = { _started.get() && _stopIndex.get() == null },
+            loop = { _stopIndex.get() == null },
             delay = { delay(linearInterval) }
         )
     }
@@ -102,11 +116,11 @@ open class FDecayIndexLooper(
      * 减速
      */
     private suspend fun performDecay() {
-        val stopIndex = _stopIndex.get() ?: return
+        val stopIndex = checkNotNull(_stopIndex.get())
 
         val list = calculateIntervalList()
         if (list.isEmpty()) {
-            notifyCurrentIndex(stopIndex)
+            currentIndex = stopIndex
             return
         }
 
@@ -171,23 +185,17 @@ open class FDecayIndexLooper(
         }
     }
 
+    /**
+     * 循环
+     */
     private suspend fun loop(
         loop: () -> Boolean,
         delay: suspend () -> Unit,
     ) {
         while (loop()) {
             val nextIndex = (checkNotNull(currentIndex) + 1).takeIf { it < _size } ?: 0
-            notifyCurrentIndex(nextIndex)
+            currentIndex = nextIndex
             delay()
         }
     }
-
-    private fun notifyCurrentIndex(index: Int) {
-        if (currentIndex != index) {
-            currentIndex = index
-            onIndexChange(index)
-        }
-    }
-
-    protected open fun onIndexChange(index: Int) = Unit
 }

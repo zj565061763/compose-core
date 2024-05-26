@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sd.demo.compose.core.theme.AppTheme
 import com.sd.lib.compose.core.utils.FDecayIndexLooper
-import kotlinx.coroutines.launch
 
 private const val SIZE = 5
 
@@ -40,8 +39,10 @@ class SampleDecayIndexLooper : ComponentActivity() {
 private fun Content(
     modifier: Modifier = Modifier,
 ) {
-    val looper = remember { FDecayIndexLooper() }
     val coroutineScope = rememberCoroutineScope()
+    val looper = remember(coroutineScope) {
+        FDecayIndexLooper(coroutineScope)
+    }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -55,7 +56,7 @@ private fun Content(
 
         Row {
             Button(onClick = {
-                coroutineScope.launch { looper.startLoop(SIZE) }
+                looper.startLoop(SIZE)
             }) {
                 Text(text = "开始循环")
             }
@@ -63,7 +64,7 @@ private fun Content(
             Spacer(modifier = Modifier.width(10.dp))
 
             Button(onClick = {
-                coroutineScope.launch { looper.startDecay(3) }
+                looper.startDecay(3)
             }) {
                 Text(text = "开始减速")
             }
