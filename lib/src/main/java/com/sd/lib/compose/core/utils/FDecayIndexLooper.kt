@@ -58,6 +58,8 @@ class FDecayIndexLooper(
         initialIndex: Int = 0,
         /** 开始回调 */
         onStart: () -> Unit = {},
+        /** 结束回调 */
+        onStop: () -> Unit = {},
     ): Boolean {
         if (size <= 0) return false
         if (!_started.compareAndSet(false, true)) return false
@@ -76,6 +78,7 @@ class FDecayIndexLooper(
                 performDecay()
             } finally {
                 reset()
+                onStop()
             }
         }.isActive.also { isActive ->
             if (!isActive) {

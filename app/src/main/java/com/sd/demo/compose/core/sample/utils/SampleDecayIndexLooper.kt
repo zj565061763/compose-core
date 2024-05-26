@@ -57,7 +57,12 @@ private fun Content(
 
         Row {
             Button(onClick = {
-                val startLoop = looper.startLoop(SIZE)
+                val startLoop = looper.startLoop(
+                    size = SIZE,
+                    initialIndex = 0,
+                    onStart = { logMsg { "onStart" } },
+                    onStop = { logMsg { "onStop" } },
+                )
                 logMsg { "click startLoop:${startLoop}" }
             }) {
                 Text(text = "开始循环")
