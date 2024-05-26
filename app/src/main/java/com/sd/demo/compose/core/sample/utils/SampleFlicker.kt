@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +42,9 @@ private fun Content(
     /** 是否闪烁 */
     var flicker by remember { mutableStateOf(false) }
 
+    /** 是否可用 */
+    var enabled by remember { mutableStateOf(true) }
+
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -49,14 +53,18 @@ private fun Content(
             modifier = Modifier
                 .fFlicker(
                     flicker = flicker,
+                    enabled = enabled,
                     onFlickerFinish = {
                         logMsg { "onFlickerFinish" }
                         flicker = false
                     },
                 )
                 .size(100.dp)
-                .background(Color.Red)
-        )
+                .background(Color.Red),
+            contentAlignment = Alignment.Center,
+        ) {
+            Switch(checked = enabled, onCheckedChange = { enabled = it })
+        }
 
         Button(
             onClick = {
