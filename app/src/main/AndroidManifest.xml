@@ -34,6 +34,7 @@
         <activity android:name=".sample.utils.SampleString" />
         <activity android:name=".sample.utils.SampleConstrainLayout" />
         <activity android:name=".sample.utils.SampleDecayIndexLooper" />
+        <activity android:name=".sample.utils.SampleFlicker" />
 
     </application>
 
