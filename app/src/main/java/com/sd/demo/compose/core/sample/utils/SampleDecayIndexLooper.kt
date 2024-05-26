@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.sd.demo.compose.core.logMsg
 import com.sd.demo.compose.core.theme.AppTheme
 import com.sd.lib.compose.core.utils.FDecayIndexLooper
 
@@ -56,7 +57,8 @@ private fun Content(
 
         Row {
             Button(onClick = {
-                looper.startLoop(SIZE)
+                val startLoop = looper.startLoop(SIZE)
+                logMsg { "click startLoop:${startLoop}" }
             }) {
                 Text(text = "开始循环")
             }
@@ -64,7 +66,8 @@ private fun Content(
             Spacer(modifier = Modifier.width(10.dp))
 
             Button(onClick = {
-                looper.startDecay(3)
+                val startDecay = looper.startDecay(3)
+                logMsg { "click startDecay:${startDecay}" }
             }) {
                 Text(text = "开始减速")
             }
