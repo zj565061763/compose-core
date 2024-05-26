@@ -49,7 +49,6 @@ private fun Content(
             modifier = Modifier
                 .fFlicker(
                     flicker = flicker,
-                    repeatCount = Int.MAX_VALUE,
                     onFlickerFinish = {
                         logMsg { "onFlickerFinish" }
                         flicker = false
