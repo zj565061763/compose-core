@@ -28,6 +28,10 @@ open class FDecayIndexLooper(
     var looping by mutableStateOf(false)
         private set
 
+    /** 是否正在减速中 */
+    var decaying by mutableStateOf(false)
+        private set
+
     /** 是否已经开始 */
     private val _started = AtomicBoolean(false)
 
@@ -61,6 +65,7 @@ open class FDecayIndexLooper(
                 performLinear()
                 performDecay()
             } finally {
+                decaying = false
                 looping = false
                 _started.set(false)
             }
@@ -73,7 +78,9 @@ open class FDecayIndexLooper(
     fun startDecay(stopIndex: Int) {
         if (_started.get()) {
             val legalIndex = stopIndex.coerceIn(0, _size - 1)
-            _stopIndex.compareAndSet(null, legalIndex)
+            if (_stopIndex.compareAndSet(null, legalIndex)) {
+                decaying = true
+            }
         }
     }
 
