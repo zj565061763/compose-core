@@ -13,7 +13,7 @@ open class FDecayIndexLooper(
     /** 匀速间隔 */
     private val linearInterval: Long = 100,
     /** 当减速间隔大于[maxDecayInterval]时停止循环 */
-    private val maxDecayInterval: Long = linearInterval * 10,
+    private val maxDecayInterval: Long = linearInterval * 12,
     /** 计算减速增加的间隔 */
     private val decayIncreasedInterval: (interval: Long) -> Long = { (it * 0.25f).toLong() },
 ) {
