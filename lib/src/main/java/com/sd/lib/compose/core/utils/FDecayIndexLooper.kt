@@ -45,6 +45,8 @@ open class FDecayIndexLooper(
         size: Int,
         /** 初始位置 */
         initialIndex: Int = 0,
+        /** 开始回调 */
+        onStart: () -> Unit = {},
     ) {
         if (size <= 0) return
         if (_started.compareAndSet(false, true)) {
@@ -53,6 +55,7 @@ open class FDecayIndexLooper(
             try {
                 currentIndex = initialIndex.coerceIn(0, size - 1)
                 looping = true
+                onStart()
                 delay(linearInterval)
 
                 performLinear()
