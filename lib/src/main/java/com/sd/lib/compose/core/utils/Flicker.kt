@@ -2,10 +2,7 @@ package com.sd.lib.compose.core.utils
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
@@ -18,52 +15,31 @@ fun Modifier.fFlicker(
     flicker: Boolean,
     /** 是否可用 */
     enabled: Boolean = true,
-    /** 开始透明度 */
-    startAlpha: Float = 1f,
-    /** 结束透明度 */
-    endAlpha: Float = 0f,
-    /** 闪烁重复次数 */
+    /** 重复次数 */
     repeatCount: Int = 2,
-    /** 执行动画到开始透明度 */
-    animateToStartAlpha: suspend (Animatable<Float, AnimationVector1D>, Float) -> Unit = { animatable, alpha ->
-        animatable.animateTo(alpha)
+    /** 初始透明度 */
+    initialAlpha: Float = 1f,
+    /** 开始回调 */
+    onStart: suspend (Animatable<Float, AnimationVector1D>) -> Unit = {
+        it.snapTo(1f)
     },
-    /** 执行动画到结束透明度 */
-    animateToEndAlpha: suspend (Animatable<Float, AnimationVector1D>, Float) -> Unit = { animatable, alpha ->
-        animatable.animateTo(alpha)
+    /** 重复回调 */
+    onRepeat: suspend (Animatable<Float, AnimationVector1D>) -> Unit = {
+        it.animateTo(0f)
+        it.animateTo(1f)
     },
-    /** 闪烁结束回调 */
-    onFlickerFinish: () -> Unit,
+    /** 结束回调 */
+    onFinish: suspend (Animatable<Float, AnimationVector1D>) -> Unit = {},
 ): Modifier = if (enabled) {
     composed {
-        require(repeatCount > 0)
-
-        val startAlphaUpdated by rememberUpdatedState(startAlpha)
-        val endAlphaUpdated by rememberUpdatedState(endAlpha)
-        val repeatCountUpdated by rememberUpdatedState(repeatCount)
-        val animateToStartAlphaUpdated by rememberUpdatedState(animateToStartAlpha)
-        val animateToEndAlphaUpdated by rememberUpdatedState(animateToEndAlpha)
-
-        val animatable = remember { Animatable(1f) }
-        val onFlickerFinishUpdated by rememberUpdatedState(onFlickerFinish)
-
-        if (flicker) {
-            LaunchedEffect(animatable) {
-                animatable.snapTo(startAlphaUpdated)
-                if (repeatCountUpdated == Int.MAX_VALUE) {
-                    while (true) {
-                        animateToEndAlphaUpdated(animatable, endAlphaUpdated)
-                        animateToStartAlphaUpdated(animatable, startAlphaUpdated)
-                    }
-                } else {
-                    repeat(repeatCountUpdated) {
-                        animateToEndAlphaUpdated(animatable, endAlphaUpdated)
-                        animateToStartAlphaUpdated(animatable, startAlphaUpdated)
-                    }
-                    onFlickerFinishUpdated()
-                }
-            }
-        }
+        val animatable = remember(initialAlpha) { Animatable(initialAlpha) }
+        animatable.fRepeat(
+            anim = flicker,
+            repeatCount = repeatCount,
+            onStart = { onStart(it) },
+            onRepeat = { onRepeat(it) },
+            onFinish = { onFinish(it) }
+        )
 
         graphicsLayer {
             this.alpha = animatable.value
