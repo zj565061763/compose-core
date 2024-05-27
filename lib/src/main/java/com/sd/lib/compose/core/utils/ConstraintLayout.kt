@@ -17,7 +17,7 @@ import androidx.constraintlayout.compose.Dimension
 @Composable
 fun ConstraintLayoutScope.fHorizontalLine(
     bias: Float,
-    target: ConstrainedLayoutReference? = null,
+    target: ConstrainedLayoutReference?,
     color: Color = Color.Red,
 ): ConstrainedLayoutReference {
     return createRef().also { line ->
@@ -57,7 +57,7 @@ fun ConstraintLayoutScope.fHorizontalLine(
 @Composable
 fun ConstraintLayoutScope.fVerticalLine(
     bias: Float,
-    target: ConstrainedLayoutReference? = null,
+    target: ConstrainedLayoutReference?,
     color: Color = Color.Red,
 ): ConstrainedLayoutReference {
     return createRef().also { line ->

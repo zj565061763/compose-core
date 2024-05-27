@@ -30,8 +30,8 @@ private fun Content(
     ConstraintLayout(
         modifier = modifier.fillMaxSize(),
     ) {
-        fHorizontalLine(bias = 0.5f)
-        fVerticalLine(bias = 0.5f)
+        fHorizontalLine(bias = 0.5f, target = null)
+        fVerticalLine(bias = 0.5f, target = null)
     }
 }
 
