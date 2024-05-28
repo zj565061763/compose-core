@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.sd.lib.compose.core
+package com.sd.lib.compose.core.utils
 
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.ColorDrawable
@@ -52,7 +52,7 @@ private val MAIN_HANDLER by lazy(LazyThreadSafetyMode.NONE) {
  *
  * Instances are usually retrieved from [rememberDrawablePainter].
  */
-public class DrawablePainter(
+internal class DrawablePainter(
     public val drawable: Drawable
 ) : Painter(), RememberObserver {
     private var drawInvalidateTick by mutableStateOf(0)
@@ -149,7 +149,7 @@ public class DrawablePainter(
  * @sample com.google.accompanist.sample.drawablepainter.BasicSample
  */
 @Composable
-public fun rememberDrawablePainter(drawable: Drawable?): Painter = remember(drawable) {
+internal fun rememberDrawablePainter(drawable: Drawable?): Painter = remember(drawable) {
     when (drawable) {
         null -> EmptyPainter
         is ColorDrawable -> ColorPainter(Color(drawable.color))

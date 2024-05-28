@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import com.sd.lib.compose.core.rememberDrawablePainter
 
 @Composable
 fun fDrawablePainter(
