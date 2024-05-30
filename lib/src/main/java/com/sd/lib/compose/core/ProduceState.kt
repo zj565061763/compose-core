@@ -12,17 +12,29 @@ import androidx.compose.runtime.rememberUpdatedState
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.CoroutineContext
 
-/**
- * 把[getValue]的返回值转为[State]
- */
 @Composable
 fun <T> fProduceState(
     getValue: () -> T,
     vararg keys: Any?,
     producer: suspend FProduceStateScope<T>.() -> Unit,
 ): State<T> {
+    return fProduceMutableState(
+        getValue = getValue,
+        keys = keys,
+        producer = producer,
+    )
+}
+
+@Composable
+fun <T> fProduceMutableState(
+    getValue: () -> T,
+    vararg keys: Any?,
+    producer: suspend FProduceStateScope<T>.() -> Unit,
+): MutableState<T> {
     val getValueUpdated by rememberUpdatedState(getValue)
-    val result = remember { mutableStateOf(getValue()) }
+    val result = remember {
+        mutableStateOf(getValue())
+    }
     LaunchedEffect(*keys) {
         object : ProduceStateScopeImpl<T>(result, coroutineContext) {
             override fun updateValue(): T {
@@ -36,9 +48,6 @@ fun <T> fProduceState(
 }
 
 interface FProduceStateScope<T> : ProduceStateScope<T> {
-    /**
-     * 更新[value]
-     */
     fun updateValue(): T
 }
 
