@@ -92,7 +92,10 @@ fun PagerState.fSettledPage(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PagerState.fLoopPlay(
-    delay: suspend () -> Unit = { delay(3_000) },
+    getDelay: () -> Long = { 3_000 },
+    getNextPage: PagerState.() -> Int = {
+        (currentPage + 1).takeIf { it < pageCount } ?: 0
+    },
 ) {
     val state = this
 
@@ -108,18 +111,19 @@ fun PagerState.fLoopPlay(
         return
     }
 
-    val delayUpdated by rememberUpdatedState(delay)
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val getDelayUpdated by rememberUpdatedState(getDelay)
+    val getNextPageUpdated by rememberUpdatedState(getNextPage)
 
+    val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(state, lifecycleOwner) {
         while (true) {
             val pageCount = state.pageCount
             if (pageCount <= 1) break
 
-            delayUpdated()
+            delay(getDelayUpdated())
             lifecycleOwner.fAwait()
 
-            val nextPage = (state.currentPage + 1).takeIf { it < pageCount } ?: 0
+            val nextPage = getNextPageUpdated()
             state.animateScrollToPage(nextPage)
         }
     }
