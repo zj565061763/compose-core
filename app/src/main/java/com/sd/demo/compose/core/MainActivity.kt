@@ -24,6 +24,7 @@ import com.sd.demo.compose.core.sample.SampleLifecycle
 import com.sd.demo.compose.core.sample.SampleTabContainer
 import com.sd.demo.compose.core.sample.SampleViewModelScope
 import com.sd.demo.compose.core.sample.utils.SampleAnnotatedTarget
+import com.sd.demo.compose.core.sample.utils.SampleBanner
 import com.sd.demo.compose.core.sample.utils.SampleCarousel
 import com.sd.demo.compose.core.sample.utils.SampleClick
 import com.sd.demo.compose.core.sample.utils.SampleConstrainLayout
@@ -46,13 +47,14 @@ class MainActivity : ComponentActivity() {
                         SampleViewModelScope::class.java,
 
                         SampleAnnotatedTarget::class.java,
+                        SampleBanner::class.java,
                         SampleCarousel::class.java,
                         SampleClick::class.java,
-                        SamplePager::class.java,
-                        SampleString::class.java,
                         SampleConstrainLayout::class.java,
                         SampleDecayIndexLooper::class.java,
                         SampleFlicker::class.java,
+                        SamplePager::class.java,
+                        SampleString::class.java,
                     ),
                     onClickActivity = {
                         startActivity(Intent(this, it))

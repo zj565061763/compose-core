@@ -28,13 +28,14 @@
         <activity android:name=".sample.SampleViewModelScope" />
 
         <activity android:name=".sample.utils.SampleAnnotatedTarget" />
+        <activity android:name=".sample.utils.SampleBanner" />
         <activity android:name=".sample.utils.SampleCarousel" />
         <activity android:name=".sample.utils.SampleClick" />
-        <activity android:name=".sample.utils.SamplePager" />
-        <activity android:name=".sample.utils.SampleString" />
         <activity android:name=".sample.utils.SampleConstrainLayout" />
         <activity android:name=".sample.utils.SampleDecayIndexLooper" />
         <activity android:name=".sample.utils.SampleFlicker" />
+        <activity android:name=".sample.utils.SamplePager" />
+        <activity android:name=".sample.utils.SampleString" />
 
     </application>
 
