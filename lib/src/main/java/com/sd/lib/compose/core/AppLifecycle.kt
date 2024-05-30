@@ -46,6 +46,15 @@ val fAppIsStartedFlow: StateFlow<Boolean>
 /**
  * 等待状态大于等于[state]
  */
+suspend fun LifecycleOwner.fAwait(
+    state: Lifecycle.State = Lifecycle.State.STARTED,
+) {
+    lifecycle.fAwait(state = state)
+}
+
+/**
+ * 等待状态大于等于[state]
+ */
 suspend fun Lifecycle.fAwait(
     state: Lifecycle.State = Lifecycle.State.STARTED,
 ) {
