@@ -1,4 +1,4 @@
-package com.sd.lib.compose.core.utils
+package com.sd.lib.compose.core
 
 import android.app.Activity
 import android.content.Context
