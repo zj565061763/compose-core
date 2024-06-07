@@ -17,7 +17,7 @@ import androidx.constraintlayout.compose.Dimension
 /**
  * [ConstrainScope.linkTo]
  */
-fun ConstrainScope.fHorizontallyTo(
+fun ConstrainScope.fVerticallyTo(
     target: ConstrainedLayoutReference,
     topMargin: Dp = 0.dp,
     bottomMargin: Dp = 0.dp,
@@ -39,7 +39,7 @@ fun ConstrainScope.fHorizontallyTo(
 /**
  * [ConstrainScope.linkTo]
  */
-fun ConstrainScope.fVerticallyTo(
+fun ConstrainScope.fHorizontallyTo(
     target: ConstrainedLayoutReference,
     startMargin: Dp = 0.dp,
     endMargin: Dp = 0.dp,
