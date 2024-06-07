@@ -1,15 +1,62 @@
 package com.sd.lib.compose.core.utils
 
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstrainScope
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
+
+/**
+ * [ConstrainScope.linkTo]
+ */
+fun ConstrainScope.fHorizontallyTo(
+    target: ConstrainedLayoutReference,
+    topMargin: Dp = 0.dp,
+    bottomMargin: Dp = 0.dp,
+    topGoneMargin: Dp = 0.dp,
+    bottomGoneMargin: Dp = 0.dp,
+    @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f,
+) {
+    linkTo(
+        top = target.top,
+        bottom = target.bottom,
+        topMargin = topMargin,
+        bottomMargin = bottomMargin,
+        topGoneMargin = topGoneMargin,
+        bottomGoneMargin = bottomGoneMargin,
+        bias = bias,
+    )
+}
+
+/**
+ * [ConstrainScope.linkTo]
+ */
+fun ConstrainScope.fVerticallyTo(
+    target: ConstrainedLayoutReference,
+    startMargin: Dp = 0.dp,
+    endMargin: Dp = 0.dp,
+    startGoneMargin: Dp = 0.dp,
+    endGoneMargin: Dp = 0.dp,
+    @FloatRange(from = 0.0, to = 1.0) bias: Float = 0.5f,
+) {
+    linkTo(
+        start = target.start,
+        end = target.end,
+        startMargin = startMargin,
+        endMargin = endMargin,
+        startGoneMargin = startGoneMargin,
+        endGoneMargin = endGoneMargin,
+        bias = bias,
+    )
+}
 
 /**
  * 横向参考线，距离目标[target]的top百分比[bias]，如果[target]为null默认为parent
