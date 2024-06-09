@@ -12,7 +12,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -40,4 +42,16 @@ fun <T, F : StateFlow<T>> fFlowStateWithLifecycle(
             minActiveState = minActiveState,
             context = context,
         )
+}
+
+fun <T, F : Flow<T>> F.fStateIn(
+    scope: CoroutineScope = fAppLifecycleScope,
+    started: SharingStarted = SharingStarted.Lazily,
+    initialValue: T,
+): StateFlow<T> {
+    return stateIn(
+        scope = scope,
+        started = started,
+        initialValue = initialValue,
+    )
 }
