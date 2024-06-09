@@ -3,16 +3,14 @@ package com.sd.lib.compose.core
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -55,15 +53,11 @@ fun <T, F : Flow<T>> fFlowStateWithLifecycle(
 
     val flow = remember { getFlow() }
     val initialValue = remember(flow) { getInitialValue(flow) }
-    val lifecycle = lifecycleOwner.lifecycle
 
-    return produceState(initialValue, flow, lifecycle, minActiveState, context) {
-        lifecycle.repeatOnLifecycle(minActiveState) {
-            if (context == EmptyCoroutineContext) {
-                flow.collect { this@produceState.value = it }
-            } else withContext(context) {
-                flow.collect { this@produceState.value = it }
-            }
-        }
-    }
+    return flow.collectAsStateWithLifecycle(
+        initialValue = initialValue,
+        lifecycleOwner = lifecycleOwner,
+        minActiveState = minActiveState,
+        context = context,
+    )
 }
