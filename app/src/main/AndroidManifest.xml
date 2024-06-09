@@ -23,6 +23,7 @@
         </activity>
 
         <activity android:name=".sample.SampleActive" />
+        <activity android:name=".sample.SampleFlowState" />
         <activity android:name=".sample.SampleLifecycle" />
         <activity android:name=".sample.SampleTabContainer" />
         <activity android:name=".sample.SampleViewModelScope" />

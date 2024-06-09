@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sd.demo.compose.core.sample.SampleActive
+import com.sd.demo.compose.core.sample.SampleFlowState
 import com.sd.demo.compose.core.sample.SampleLifecycle
 import com.sd.demo.compose.core.sample.SampleTabContainer
 import com.sd.demo.compose.core.sample.SampleViewModelScope
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
                 Content(
                     listActivity = listOf(
                         SampleActive::class.java,
+                        SampleFlowState::class.java,
                         SampleLifecycle::class.java,
                         SampleTabContainer::class.java,
                         SampleViewModelScope::class.java,
