@@ -12,8 +12,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -44,7 +46,7 @@ fun <T, F : StateFlow<T>> fFlowStateWithLifecycle(
         )
 }
 
-fun <T, F : Flow<T>> F.fStateIn(
+fun <T> Flow<T>.fStateIn(
     scope: CoroutineScope = fAppLifecycleScope,
     started: SharingStarted = SharingStarted.Lazily,
     initialValue: T,
@@ -53,5 +55,17 @@ fun <T, F : Flow<T>> F.fStateIn(
         scope = scope,
         started = started,
         initialValue = initialValue,
+    )
+}
+
+fun <T> Flow<T>.fShareIn(
+    scope: CoroutineScope = fAppLifecycleScope,
+    started: SharingStarted = SharingStarted.Lazily,
+    replay: Int = 0,
+): SharedFlow<T> {
+    return shareIn(
+        scope = scope,
+        started = started,
+        replay = replay,
     )
 }
