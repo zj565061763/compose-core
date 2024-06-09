@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.sd.demo.compose.core.theme.AppTheme
@@ -33,9 +32,7 @@ class SampleFlowState : ComponentActivity() {
 private fun Content(
     modifier: Modifier = Modifier,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
-    val countdown by fFlowStateWithLifecycle(100) {
+    val countdown by fFlowStateWithLifecycle(100) { scope ->
         var seconds = 100
         flow {
             while (seconds > 0) {
@@ -44,7 +41,7 @@ private fun Content(
                 emit(seconds)
             }
         }.stateIn(
-            scope = coroutineScope,
+            scope = scope,
             started = SharingStarted.Lazily,
             initialValue = seconds,
         )
