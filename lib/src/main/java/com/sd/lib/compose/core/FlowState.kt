@@ -2,7 +2,6 @@ package com.sd.lib.compose.core
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -14,49 +13,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
-
-/**
- * [collectAsState]
- */
-@Composable
-fun <T, F : StateFlow<T>> fFlowState(
-    /** 预览模式的值 */
-    inspectionValue: T,
-    context: CoroutineContext = EmptyCoroutineContext,
-    /** 要监听的[Flow] */
-    getFlow: () -> F,
-): State<T> {
-    val inspectionMode = LocalInspectionMode.current
-    if (inspectionMode) {
-        remember { mutableStateOf(inspectionValue) }
-    }
-    return remember { getFlow() }
-        .collectAsState(context = context)
-}
-
-/**
- * [collectAsState]
- */
-@Composable
-fun <T, F : Flow<T>> fFlowState(
-    /** 预览模式的值 */
-    inspectionValue: T,
-    /** 初始值 */
-    getInitialValue: () -> T,
-    context: CoroutineContext = EmptyCoroutineContext,
-    /** 要监听的[Flow] */
-    getFlow: () -> F,
-): State<T> {
-    val inspectionMode = LocalInspectionMode.current
-    if (inspectionMode) {
-        remember { mutableStateOf(inspectionValue) }
-    }
-    return remember { getFlow() }
-        .collectAsState(
-            initial = remember { getInitialValue() },
-            context = context,
-        )
-}
 
 /**
  * [collectAsStateWithLifecycle]
