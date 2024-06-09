@@ -24,14 +24,14 @@ import kotlin.coroutines.EmptyCoroutineContext
  * [collectAsStateWithLifecycle]
  */
 @Composable
-fun <T, F : StateFlow<T>> fFlowStateWithLifecycle(
+fun <T> fFlowStateWithLifecycle(
     /** 预览模式的值 */
     inspectionValue: T,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     context: CoroutineContext = EmptyCoroutineContext,
     /** 要监听的[Flow] */
-    getFlow: (CoroutineScope) -> F,
+    getFlow: (CoroutineScope) -> StateFlow<T>,
 ): State<T> {
     val inspectionMode = LocalInspectionMode.current
     if (inspectionMode) {
