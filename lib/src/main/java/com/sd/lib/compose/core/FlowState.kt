@@ -14,48 +14,47 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
+/**
+ * [collectAsStateWithLifecycle]
+ */
 @Composable
-fun <T, F : StateFlow<T>> fFlowStateWithLifecycle(
-    /** 预览模式的值 */
-    inspectionValue: T,
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    context: CoroutineContext = EmptyCoroutineContext,
-    /** 要监听的[Flow] */
-    getFlow: () -> F,
-): State<T> {
-    return fFlowStateWithLifecycle(
-        inspectionValue = inspectionValue,
-        getInitialValue = { it.value },
-        lifecycleOwner = lifecycleOwner,
-        minActiveState = minActiveState,
-        context = context,
-        getFlow = getFlow,
-    )
-}
-
-@Composable
-fun <T, F : Flow<T>> fFlowStateWithLifecycle(
+fun <T> Flow<T>.fCollectAsStateWithLifecycle(
     /** 预览模式的值 */
     inspectionValue: T,
     /** 初始值 */
-    getInitialValue: (F) -> T,
+    initialValue: T,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     context: CoroutineContext = EmptyCoroutineContext,
-    /** 要监听的[Flow] */
-    getFlow: () -> F,
 ): State<T> {
     val inspectionMode = LocalInspectionMode.current
     if (inspectionMode) {
         remember { mutableStateOf(inspectionValue) }
     }
-
-    val flow = remember { getFlow() }
-    val initialValue = remember(flow) { getInitialValue(flow) }
-
-    return flow.collectAsStateWithLifecycle(
+    return collectAsStateWithLifecycle(
         initialValue = initialValue,
+        lifecycleOwner = lifecycleOwner,
+        minActiveState = minActiveState,
+        context = context,
+    )
+}
+
+/**
+ * [collectAsStateWithLifecycle]
+ */
+@Composable
+fun <T> StateFlow<T>.fCollectAsStateWithLifecycle(
+    /** 预览模式的值 */
+    inspectionValue: T,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
+    context: CoroutineContext = EmptyCoroutineContext,
+): State<T> {
+    val inspectionMode = LocalInspectionMode.current
+    if (inspectionMode) {
+        remember { mutableStateOf(inspectionValue) }
+    }
+    return collectAsStateWithLifecycle(
         lifecycleOwner = lifecycleOwner,
         minActiveState = minActiveState,
         context = context,
