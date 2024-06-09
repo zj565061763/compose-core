@@ -41,32 +41,3 @@ fun <T, F : StateFlow<T>> fFlowStateWithLifecycle(
             context = context,
         )
 }
-
-/**
- * [collectAsStateWithLifecycle]
- */
-@Composable
-fun <T, F : Flow<T>> fFlowStateWithLifecycle(
-    /** 预览模式的值 */
-    inspectionValue: T,
-    /** 初始值 */
-    getInitialValue: () -> T,
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
-    context: CoroutineContext = EmptyCoroutineContext,
-    /** 要监听的[Flow] */
-    getFlow: (CoroutineScope) -> F,
-): State<T> {
-    val inspectionMode = LocalInspectionMode.current
-    if (inspectionMode) {
-        remember { mutableStateOf(inspectionValue) }
-    }
-    val coroutineScope = rememberCoroutineScope()
-    return remember { getFlow(coroutineScope) }
-        .collectAsStateWithLifecycle(
-            initialValue = remember { getInitialValue() },
-            lifecycleOwner = lifecycleOwner,
-            minActiveState = minActiveState,
-            context = context,
-        )
-}
