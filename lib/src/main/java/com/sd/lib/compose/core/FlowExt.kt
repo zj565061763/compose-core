@@ -35,15 +35,16 @@ fun <T> fFlowStateWithLifecycle(
 ): State<T> {
     val inspectionMode = LocalInspectionMode.current
     if (inspectionMode) {
-        remember { mutableStateOf(inspectionValue) }
+        remember(inspectionValue) { mutableStateOf(inspectionValue) }
     }
+
     val coroutineScope = rememberCoroutineScope()
-    return remember { getFlow(coroutineScope) }
-        .collectAsStateWithLifecycle(
-            lifecycleOwner = lifecycleOwner,
-            minActiveState = minActiveState,
-            context = context,
-        )
+    val stateFlow = remember { getFlow(coroutineScope) }
+    return stateFlow.collectAsStateWithLifecycle(
+        lifecycleOwner = lifecycleOwner,
+        minActiveState = minActiveState,
+        context = context,
+    )
 }
 
 fun <T> Flow<T>.fStateIn(
