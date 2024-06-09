@@ -8,10 +8,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import androidx.lifecycle.lifecycleScope
 import com.sd.demo.compose.core.logMsg
 import com.sd.demo.compose.core.theme.AppTheme
-import com.sd.lib.compose.core.fAppIsStartedFlow
 import com.sd.lib.compose.core.fAppLifecycleScope
 import com.sd.lib.compose.core.fAwait
 import kotlinx.coroutines.delay
@@ -29,12 +27,6 @@ class SampleLifecycle : ComponentActivity() {
         fAppLifecycleScope.launch {
             logMsg { "fAppLifecycleScope launched" }
         }
-
-        lifecycleScope.launch {
-            fAppIsStartedFlow.collect {
-                logMsg { "App started:$it" }
-            }
-        }
     }
 }
 
@@ -47,10 +39,10 @@ private fun Content() {
         logMsg { "ON_STOP" }
     }
 
-    val lifecycle = LocalLifecycleOwner.current.lifecycle
-    LaunchedEffect(lifecycle) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
         while (true) {
-            lifecycle.fAwait()
+            lifecycleOwner.fAwait()
             logMsg { "lifecycle" }
             delay(1_000)
         }
