@@ -35,7 +35,7 @@ fun <T> fFlowStateWithLifecycle(
 ): State<T> {
     val inspectionMode = LocalInspectionMode.current
     if (inspectionMode) {
-        remember(inspectionValue) { mutableStateOf(inspectionValue) }
+        return remember(inspectionValue) { mutableStateOf(inspectionValue) }
     }
 
     val coroutineScope = rememberCoroutineScope()
