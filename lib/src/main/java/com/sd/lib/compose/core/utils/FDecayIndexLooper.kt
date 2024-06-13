@@ -200,9 +200,9 @@ class FDecayIndexLooper(
     /**
      * 循环
      */
-    private suspend fun loop(
+    private inline fun loop(
         loop: () -> Boolean,
-        delay: suspend () -> Unit,
+        delay: () -> Unit,
     ) {
         while (loop()) {
             delay()
