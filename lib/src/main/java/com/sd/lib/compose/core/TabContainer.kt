@@ -39,6 +39,7 @@ interface TabContainerScope {
     fun tab(
         key: Any,
         display: TabDisplay? = null,
+        eager: Boolean = false,
         content: @Composable () -> Unit,
     )
 }
@@ -77,6 +78,7 @@ private class TabContainerImpl : TabContainerScope {
     override fun tab(
         key: Any,
         display: TabDisplay?,
+        eager: Boolean,
         content: @Composable () -> Unit,
     ) {
         if (_configState.get() == ConfigState.Config) {
@@ -86,6 +88,10 @@ private class TabContainerImpl : TabContainerScope {
             } else {
                 info.display = display
                 info.content = content
+            }
+
+            if (eager) {
+                activeTab(key)
             }
         }
     }
@@ -102,6 +108,16 @@ private class TabContainerImpl : TabContainerScope {
         }
     }
 
+    private fun activeTab(key: Any) {
+        if (_activeTabs[key] == null) {
+            val info = checkNotNull(_store[key]) { "Key $key was not found." }
+            _activeTabs[key] = TabState(
+                display = mutableStateOf(info.display),
+                content = mutableStateOf(info.content),
+            )
+        }
+    }
+
     @Composable
     fun Content(selectedKey: Any) {
         SideEffect {
@@ -109,13 +125,7 @@ private class TabContainerImpl : TabContainerScope {
         }
 
         LaunchedEffect(selectedKey) {
-            if (_activeTabs[selectedKey] == null) {
-                val info = checkNotNull(_store[selectedKey]) { "Key $selectedKey was not found." }
-                _activeTabs[selectedKey] = TabState(
-                    display = mutableStateOf(info.display),
-                    content = mutableStateOf(info.content),
-                )
-            }
+            activeTab(selectedKey)
         }
 
         for ((key, state) in _activeTabs) {
