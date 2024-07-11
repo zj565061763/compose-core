@@ -8,10 +8,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 /**
  * 消费所有事件
  */
-fun Modifier.fConsumePointerEvent(): Modifier {
+fun Modifier.fConsumePointerEvent(
+    pass: PointerEventPass = PointerEventPass.Initial,
+): Modifier {
     return this.pointerInput(Unit) {
         awaitEachGesture {
-            val event = awaitPointerEvent(PointerEventPass.Initial)
+            val event = awaitPointerEvent(pass)
             event.changes.forEach { it.consume() }
         }
     }
