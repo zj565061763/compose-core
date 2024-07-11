@@ -15,13 +15,14 @@ android {
         minSdk = 21
     }
 
+    kotlinOptions {
+        freeCompilerArgs += "-module-name=$libGroupId.$libArtifactId"
+    }
+
     buildFeatures {
         compose = true
     }
 
-    kotlinOptions {
-        freeCompilerArgs += "-module-name=$libGroupId.$libArtifactId"
-    }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
     }
