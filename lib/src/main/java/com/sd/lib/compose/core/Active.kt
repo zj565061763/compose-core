@@ -78,16 +78,11 @@ fun FActive(
 fun FActiveAtLeastOnce(
     content: @Composable () -> Unit,
 ) {
-    var hasActive by remember { mutableStateOf(false) }
+    val isActive = fActive()
+    var hasActive by remember { mutableStateOf(isActive) }
 
-    val fActive = fActive()
-    LaunchedEffect(fActive) {
-        if (fActive) {
-            hasActive = true
-        }
-    }
-
-    if (hasActive) {
+    if (hasActive || isActive) {
+        hasActive = true
         content()
     }
 }
